@@ -38,3 +38,20 @@ ON          F.Friend_ID = P2.ID) AS T2
 WHERE       T1.ID = T2.ID AND T1.Salary < T2.Salary
 ORDER BY    T2.Salary;
 
+# [SQL] [Advanced Join] Symmetric Pairs
+# Solution 01
+SELECT      DISTINCT T1.X,
+            T1.Y
+FROM        (
+SELECT      X,
+            Y,
+            ROW_NUMBER() OVER (ORDER BY X) AS "RowNum"
+FROM        Functions) AS T1
+INNER JOIN  (
+SELECT      X,
+            Y,
+            ROW_NUMBER() OVER (ORDER BY X) AS "RowNum"
+FROM        Functions) AS T2
+ON         (T1.X = T2.Y) AND (T2.X = T1.Y) AND (T1.RowNum != T2.RowNum) AND (T1.X <= T1.Y)
+ORDER BY    T1.X;
+# Important: The function "Distinct" is applied to every column in SELECT Clause. 
