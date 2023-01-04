@@ -19,3 +19,22 @@ GROUP BY    Start_Date
 ORDER BY    (MIN(End_Date) - Start_Date), Start_Date;
 
 
+# [SQL] [Advanced Join] Placements
+SELECT      Name
+FROM
+(
+SELECT      S.ID,
+            S.Name,
+            P1.Salary
+FROM        Students AS S
+INNER JOIN  Packages AS P1
+ON          S.ID = P1.ID) AS T1,
+(
+SELECT      F.ID,
+            P2.Salary
+FROM        Friends AS F
+INNER JOIN  Packages AS P2
+ON          F.Friend_ID = P2.ID) AS T2
+WHERE       T1.ID = T2.ID AND T1.Salary < T2.Salary
+ORDER BY    T2.Salary;
+
