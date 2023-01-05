@@ -1,6 +1,20 @@
 # MySQL (HackerRank)
 
 
+
+# [SQL] [Advanced Select] Occupations
+SELECT
+        MAX(CASE WHEN Occupation = 'Doctor' THEN Name END) AS 'Doctors',
+        MAX(CASE WHEN Occupation = 'Professor' THEN Name END) AS 'Professors',
+        MAX(CASE WHEN Occupation = 'Singer' THEN Name END) AS 'Singers',
+        MAX(CASE WHEN Occupation = 'Actor' THEN Name END) AS 'Actors'
+FROM    (
+SELECT  *,
+        ROW_NUMBER() OVER (PARTITION BY Occupation ORDER BY Name) AS Row_Num
+FROM    OCCUPATIONS) AS T1
+GROUP BY Row_Num;
+
+
 # [SQL] [Advanced Join] SQL Project Planning
 SELECT      Start_Date,
             MIN(End_Date)
@@ -17,6 +31,7 @@ WHERE       End_Date NOT IN (SELECT Start_Date FROM Projects)
 WHERE       Start_Date < End_Date
 GROUP BY    Start_Date
 ORDER BY    (MIN(End_Date) - Start_Date), Start_Date;
+
 
 
 # [SQL] [Advanced Join] Placements
@@ -37,6 +52,8 @@ INNER JOIN  Packages AS P2
 ON          F.Friend_ID = P2.ID) AS T2
 WHERE       T1.ID = T2.ID AND T1.Salary < T2.Salary
 ORDER BY    T2.Salary;
+
+
 
 # [SQL] [Advanced Join] Symmetric Pairs
 # Solution 01
@@ -67,14 +84,4 @@ WHERE       F1.X < F1.Y AND F1.X = F2.Y AND F1.Y = F2.X) AS T1
 ORDER BY    X, Y;
 # Important: UNION removes duplicates.
 
-# [SQL] [Advanced Select] Occupations
-SELECT
-        MAX(CASE WHEN Occupation = 'Doctor' THEN Name END) AS 'Doctors',
-        MAX(CASE WHEN Occupation = 'Professor' THEN Name END) AS 'Professors',
-        MAX(CASE WHEN Occupation = 'Singer' THEN Name END) AS 'Singers',
-        MAX(CASE WHEN Occupation = 'Actor' THEN Name END) AS 'Actors'
-FROM    (
-SELECT  *,
-        ROW_NUMBER() OVER (PARTITION BY Occupation ORDER BY Name) AS Row_Num
-FROM    OCCUPATIONS) AS T1
-GROUP BY Row_Num;
+
