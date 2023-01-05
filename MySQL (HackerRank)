@@ -86,7 +86,53 @@ ORDER BY    X, Y;
 
 
 
-[SQL] [Alternative Queries] Print Prime Numbers
+# [SQL] [Alternative Queries] Draw The Triangle 1
+# Solution 01
+DELIMITER $$
+CREATE PROCEDURE asterisk_printer()
+BEGIN
+    DECLARE n INT DEFAULT 20;
+    WHILE (n > 0) DO
+        SELECT  REPEAT('* ', n);
+        SET n = n - 1;
+    END WHILE;
+END $$
+DELIMITER ;
+
+CALL asterisk_printer();
+
+# Solution 02
+DELIMITER $$
+CREATE PROCEDURE asterisk_printer (n INT) 
+    BEGIN 
+        WHILE n >= 1 DO 
+            SELECT repeat('* ', n);
+            SET n = n - 1;
+            END WHILE;
+    END; $$
+    
+CALL asterisk_printer(20);
+# Source: https://yourdigitalaid.com/hackerrank-draw-the-triangle-1-sql-solution/
+
+
+
+# [SQL] [Alternative Queries] Draw The Triangle 2
+DELIMITER $$
+CREATE PROCEDURE asterisk_printer()
+    BEGIN
+        DECLARE n INT DEFAULT 1;
+        WHILE (n <= 20) DO
+            SELECT REPEAT('* ', n);
+            SET n = n + 1;
+        END WHILE;
+    END $$
+DELIMITER ;
+
+CALL asterisk_printer();
+
+
+
+# [SQL] [Alternative Queries] Print Prime Numbers
 CREATE TABLE thousand_numbers(NUM INT PRIMARY KEY);
 
 DELIMITER $$
