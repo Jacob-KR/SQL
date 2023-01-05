@@ -66,3 +66,15 @@ SELECT      F1.X, F1.Y FROM Functions AS F1, Functions AS F2
 WHERE       F1.X < F1.Y AND F1.X = F2.Y AND F1.Y = F2.X) AS T1
 ORDER BY    X, Y;
 # Important: UNION removes duplicates.
+
+# [SQL] [Advanced Select] Occupations
+SELECT
+        MAX(CASE WHEN Occupation = 'Doctor' THEN Name END) AS 'Doctors',
+        MAX(CASE WHEN Occupation = 'Professor' THEN Name END) AS 'Professors',
+        MAX(CASE WHEN Occupation = 'Singer' THEN Name END) AS 'Singers',
+        MAX(CASE WHEN Occupation = 'Actor' THEN Name END) AS 'Actors'
+FROM    (
+SELECT  *,
+        ROW_NUMBER() OVER (PARTITION BY Occupation ORDER BY Name) AS Row_Num
+FROM    OCCUPATIONS) AS T1
+GROUP BY Row_Num;
