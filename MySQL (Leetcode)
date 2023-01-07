@@ -28,10 +28,13 @@ ORDER BY    score DESC;
 
 
 # 180. Consecutive Numbers
-SELECT      id AS 'ConsecutiveNums'
-FROM        (
+SELECT      num AS 'ConsecutiveNums'
+FROM        Logs AS L
+INNER JOIN  (
 SELECT      id,
-            SUM(num) OVER(ROWS BETWEEN CURRENT ROW AND 2 FOLLOWING) AS 'Sum_Num'
+            SUM(ABS(num)) OVER(ROWS BETWEEN CURRENT ROW AND 2 FOLLOWING) AS 'SD_Num'
 FROM        Logs
-GROUP BY    id) AS T1
-WHERE       Sum_Num = 3;
+GROUP BY    id) T1
+ON          L.id = T1.id
+WHERE       SD_Num = 3 * ABS(num);
+
