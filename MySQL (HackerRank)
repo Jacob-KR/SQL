@@ -2,6 +2,19 @@
 
 
 
+# [SQL] [Advanced Select] Type of Triangle
+SELECT  CASE
+        WHEN A = B AND B = C AND A = C THEN 'Equilateral'
+        WHEN (A > B AND A > C AND A >= B + C)
+             OR (B > A AND B > C AND B >= A + C)
+             OR (C > A AND C > B AND C >= A + B) THEN 'Not A Triangle'
+        WHEN A != B AND B != C AND A != C THEN 'Scalene'
+        WHEN A = B OR B = C OR A = C THEN 'Isosceles'
+        END
+FROM    TRIANGLES;
+
+
+
 # [SQL] [Advanced Select] Occupations
 SELECT
         MAX(CASE WHEN Occupation = 'Doctor' THEN Name END) AS 'Doctors',
