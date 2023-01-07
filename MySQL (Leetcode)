@@ -16,3 +16,22 @@ SELECT  (CASE
                WHERE salary != (SELECT MAX(salary) FROM Employee) ORDER BY salary DESC LIMIT 1)
         END) AS 'SecondHighestSalary'
 FROM    Employee;
+
+
+
+# 178. Rank Scores
+SELECT      score,
+            DENSE_RANK() OVER(ORDER BY score DESC) AS 'rank'
+FROM        Scores
+ORDER BY    score DESC;
+
+
+
+# 180. Consecutive Numbers
+SELECT      id AS 'ConsecutiveNums'
+FROM        (
+SELECT      id,
+            SUM(num) OVER(ROWS BETWEEN CURRENT ROW AND 2 FOLLOWING) AS 'Sum_Num'
+FROM        Logs
+GROUP BY    id) AS T1
+WHERE       Sum_Num = 3;
