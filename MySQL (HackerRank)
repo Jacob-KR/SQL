@@ -15,7 +15,7 @@ FROM    TRIANGLES;
 
 
 
-# [SQL] [Advanced Select] The PADs
+# [SQL] [Advanced Select] The PADS
 SELECT      CONCAT(Name, "(", SUBSTR(Occupation, 1, 1), ")")
 FROM        OCCUPATIONS
 ORDER BY    Name;
