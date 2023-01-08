@@ -28,13 +28,19 @@ ORDER BY    score DESC;
 
 
 # 180. Consecutive Numbers
-SELECT      num AS 'ConsecutiveNums'
-FROM        Logs AS L
-INNER JOIN  (
-SELECT      id,
-            SUM(ABS(num)) OVER(ROWS BETWEEN CURRENT ROW AND 2 FOLLOWING) AS 'SD_Num'
-FROM        Logs
-GROUP BY    id) T1
-ON          L.id = T1.id
-WHERE       SD_Num = 3 * ABS(num);
+WITH T1
+AS (
+    SELECT  id,
+            num,
+            LAG(num, 1) OVER () AS 'lag_1',
+            LAG(num, 2) OVER () AS 'lag_2'
+    FROM    Logs
+) 
 
+SELECT  DISTINCT num AS 'ConsecutiveNums'
+FROM    T1
+WHERE   (num = lag_1) AND (num = lag_2) AND (lag_1 = lag_2);
+
+
+
+# 181. Employees Earning More Than Their Managers
