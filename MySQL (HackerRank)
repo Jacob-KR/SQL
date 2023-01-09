@@ -42,17 +42,37 @@ GROUP BY    Row_Num;
 
 
 
-# [SQL] [Advanced Select] Occupations
-SELECT
-        MAX(CASE WHEN Occupation = 'Doctor' THEN Name END) AS 'Doctors',
-        MAX(CASE WHEN Occupation = 'Professor' THEN Name END) AS 'Professors',
-        MAX(CASE WHEN Occupation = 'Singer' THEN Name END) AS 'Singers',
-        MAX(CASE WHEN Occupation = 'Actor' THEN Name END) AS 'Actors'
-FROM    (
-SELECT  *,
-        ROW_NUMBER() OVER (PARTITION BY Occupation ORDER BY Name) AS Row_Num
-FROM    OCCUPATIONS) AS T1
-GROUP BY Row_Num;
+# [SQL] [Advanced Select] Binary Tree Nodes
+SELECT      N,
+            CASE
+            WHEN P IS NULL THEN 'Root'
+            WHEN N IN (SELECT P FROM BST) THEN 'Inner'
+            ELSE 'Leaf'
+            END
+FROM        BST
+ORDER BY    N;
+
+
+
+# [SQL] [Advanced Select] New Companies
+SELECT      C.company_code,
+            C.founder,
+            COUNT(DISTINCT LM.lead_manager_code),
+            COUNT(DISTINCT SM.senior_manager_code),
+            COUNT(DISTINCT M.manager_code),
+            COUNT(DISTINCT E.employee_code)
+FROM        Company AS C
+INNER JOIN  Lead_Manager AS LM
+ON          C.company_code = LM.company_code
+INNER JOIN  Senior_Manager AS SM
+ON          LM.lead_manager_code = SM.lead_manager_code
+INNER JOIN  Manager AS M
+ON          SM.senior_manager_code = M.senior_manager_code
+INNER JOIN  Employee AS E
+ON          M.manager_code = E.manager_code
+GROUP BY    C.company_code, C.founder
+ORDER BY    C.company_code ASC;
+
 
 
 # [SQL] [Advanced Join] SQL Project Planning
