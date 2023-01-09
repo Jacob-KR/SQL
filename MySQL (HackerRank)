@@ -75,6 +75,12 @@ ORDER BY    C.company_code ASC;
 
 
 
+# [SQL] [Aggregation] The Blunder
+SELECT  CEIL(AVG(Salary) - AVG(REPLACE(Salary, '0', '')))
+FROM    EMPLOYEES;
+
+
+
 # [SQL] [Advanced Join] SQL Project Planning
 SELECT      Start_Date,
             MIN(End_Date)
