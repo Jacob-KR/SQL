@@ -81,6 +81,25 @@ FROM    EMPLOYEES;
 
 
 
+# [SQL] [Aggregation] Weather Observation Station 20
+# Solution 01
+SELECT  ROUND(LAT_N, 4)
+FROM    (
+SELECT  LAT_N,
+        PERCENT_RANK() OVER(ORDER BY LAT_N) AS per_rank
+FROM    STATION) AS T1
+WHERE   per_rank = 0.5
+
+# Solution 02
+SELECT  ROUND(LAT_N, 4)
+FROM    (
+SELECT  LAT_N,
+        ROW_NUMBER() OVER(ORDER BY LAT_N) as row_num
+FROM    STATION) AS T1
+WHERE   row_num = (SELECT ROUND(COUNT(LAT_N)/2) FROM STATION);
+
+
+
 # [SQL] [Advanced Join] SQL Project Planning
 SELECT      Start_Date,
             MIN(End_Date)
