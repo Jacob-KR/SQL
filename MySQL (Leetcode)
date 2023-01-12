@@ -102,3 +102,18 @@ WHERE       D_Salary_Rank <= 3;
 
 
 
+# 191. Delete Duplicate Emails
+DELETE T1
+FROM Person as T1, Person as T2
+WHERE T1.Email = T2.Email AND T1.Id > T2.Id;
+
+
+
+# 197. Rising Temperature
+SELECT      W2.id
+FROM        Weather AS W1
+INNER JOIN  Weather AS W2
+ON          DATE_ADD(W1.recordDate, INTERVAL 1 Day) = W2.recordDate
+WHERE       W2.temperature > W1.temperature;
+
+
