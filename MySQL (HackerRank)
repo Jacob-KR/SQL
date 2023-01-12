@@ -100,6 +100,25 @@ WHERE   row_num = (SELECT ROUND(COUNT(LAT_N)/2) FROM STATION);
 
 
 
+# [SQL] [Basic Join] The Report
+SELECT      CASE
+            WHEN Student_Grade >= 8 THEN Student_Name
+            ELSE "NULL"
+            END,
+            Student_Grade,
+            Student_Mark
+FROM
+(
+SELECT      S.Name AS Student_Name,
+            G.Grade AS Student_Grade,
+            S.Marks AS Student_Mark
+FROM        Students AS S
+INNER JOIN  Grades AS G
+WHERE       S.Marks BETWEEN G.Min_Mark AND G.Max_Mark) AS T1
+ORDER BY    Student_Grade DESC, Student_Name ASC, Student_Mark ASC;
+
+
+
 # [SQL] [Advanced Join] SQL Project Planning
 SELECT      Start_Date,
             MIN(End_Date)
@@ -249,3 +268,6 @@ CALL myLoop();
 SELECT  GROUP_CONCAT(NUM SEPARATOR '&')
 FROM    thousand_numbers;
 # Important: GROUP_CONCAT & PROCEDURE
+
+
+
