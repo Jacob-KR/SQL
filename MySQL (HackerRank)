@@ -119,6 +119,26 @@ ORDER BY    Student_Grade DESC, Student_Name ASC, Student_Mark ASC;
 
 
 
+# [SQL] [Basic Join] Top Competitors
+SELECT      H.hacker_id,
+            H.name
+FROM        Hackers AS H
+INNER JOIN  (
+SELECT      S.hacker_id,
+            COUNT(C.challenge_id) AS count_full_score
+FROM        Submissions AS S
+INNER JOIN  Challenges AS C
+ON          S.challenge_id = C.challenge_id
+INNER JOIN  Difficulty AS D
+ON          C.difficulty_level = D.difficulty_level
+WHERE       S.score = D.score
+GROUP BY    S.hacker_id
+HAVING      COUNT(C.challenge_id) > 1) AS T1
+ON          H.hacker_id = T1.hacker_id
+ORDER BY    T1.count_full_score DESC, H.hacker_id ASC;
+
+
+
 # [SQL] [Advanced Join] SQL Project Planning
 SELECT      Start_Date,
             MIN(End_Date)
