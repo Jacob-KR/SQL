@@ -139,6 +139,25 @@ ORDER BY    T1.count_full_score DESC, H.hacker_id ASC;
 
 
 
+# [SQL] [Basic Join] Ollivander's Inventory
+# Solution 01
+SELECT      W.id,
+            WP.age,
+            W.coins_needed,
+            W.power
+FROM        Wands AS W
+INNER JOIN  Wands_Property AS WP
+ON          W.code = WP.code
+WHERE       WP.is_evil = 0
+            AND W.coins_needed = (SELECT        MIN(coins_needed)
+                                  FROM          Wands AS W2
+                                  INNER JOIN    Wands_Property AS WP2
+                                  ON            W2.code = WP2.code
+                                  WHERE         W2.power = W.power AND WP2.age = WP.age)
+ORDER BY    W.power DESC, WP.age DESC;
+
+
+
 # [SQL] [Advanced Join] SQL Project Planning
 SELECT      Start_Date,
             MIN(End_Date)
