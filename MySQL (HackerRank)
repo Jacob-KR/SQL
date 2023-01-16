@@ -158,6 +158,38 @@ ORDER BY    W.power DESC, WP.age DESC;
 
 
 
+# [SQL] [Basic Join] Challenges
+SELECT      T1.hacker_id,
+            T1.name,
+            T1.count_challenge
+FROM        (
+SELECT      H.hacker_id,
+            H.name,
+            COUNT(C.challenge_id) AS count_challenge
+FROM        Hackers AS H
+INNER JOIN  Challenges AS C
+ON          H.hacker_id = C.hacker_id
+GROUP BY    H.hacker_id, H.name) AS T1
+WHERE       T1.count_challenge = (
+SELECT      MAX(count_challenge2)
+FROM        (
+SELECT      COUNT(challenge_id) AS count_challenge2
+FROM        Challenges
+GROUP BY    hacker_id) AS T2)
+OR          T1.count_challenge IN (
+SELECT      count_challenge3
+FROM        (
+SELECT      count_challenge3
+FROM        (
+SELECT      COUNT(challenge_id) AS count_challenge3
+FROM        Challenges
+GROUP BY    hacker_id) AS T3) AS T4
+GROUP BY    count_challenge3
+HAVING      COUNT(count_challenge3) <= 1)
+ORDER BY    count_challenge DESC, T1.hacker_id ASC;
+
+
+
 # [SQL] [Advanced Join] SQL Project Planning
 SELECT      Start_Date,
             MIN(End_Date)
