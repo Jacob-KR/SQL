@@ -191,6 +191,7 @@ ORDER BY    count_challenge DESC, T1.hacker_id ASC;
 
 
 # [SQL] [Advanced Join] SQL Project Planning
+# Solution 01
 SELECT      Start_Date,
             MIN(End_Date)
 FROM        (
@@ -206,6 +207,17 @@ WHERE       End_Date NOT IN (SELECT Start_Date FROM Projects)
 WHERE       Start_Date < End_Date
 GROUP BY    Start_Date
 ORDER BY    (MIN(End_Date) - Start_Date), Start_Date;
+
+# Solution 02
+SELECT      P1.Start_Date,
+            MIN(P2.End_Date)
+FROM        Projects AS P1
+INNER JOIN  Projects AS P2
+ON          P2.End_Date NOT IN (SELECT Start_Date FROM Projects)
+AND         P1.Start_Date NOT IN (SELECT End_Date FROM PRojects)
+AND         P1.Start_Date < P2.End_Date
+GROUP BY    P1.Start_Date
+ORDER BY    DATEDIFF(MIN(P2.End_Date), P1.Start_Date) ASC, P1.Start_Date ASC;
 
 
 
