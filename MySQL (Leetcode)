@@ -19,6 +19,22 @@ FROM    Employee;
 
 
 
+# 177. Nth Highest Salary
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+SET     N = N-1;
+  RETURN (
+      SELECT    DISTINCT salary
+      FROM      Employee
+      ORDER BY  salary DESC
+      LIMIT     1 OFFSET N
+  );
+END
+# important: 1) We can not use calculation in RETURN (That's why we should use SET)
+             2) OFFSET means Skip!
+
+
+
 # 178. Rank Scores
 SELECT      score,
             DENSE_RANK() OVER(ORDER BY score DESC) AS 'rank'
