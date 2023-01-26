@@ -133,3 +133,14 @@ ON          DATE_ADD(W1.recordDate, INTERVAL 1 Day) = W2.recordDate
 WHERE       W2.temperature > W1.temperature;
 
 
+
+# 262. Trips and Users
+SELECT  request_at AS 'Day',
+        ROUND(COUNT(IF(status != 'completed', TRUE, NULL)) / COUNT(*), 2) AS 'Cancellation Rate'
+FROM    Trips
+WHERE   (request_at BETWEEN '2013-10-01' AND '2013-10-03')
+AND     client_id NOT IN (SELECT users_id FROM Users WHERE banned = 'Yes')
+AND     driver_id NOT IN (SELECT users_id FROM Users WHERE banned = 'Yes')
+GROUP BY    request_at;
+
+
