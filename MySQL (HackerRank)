@@ -293,13 +293,31 @@ DELIMITER $$
 CREATE PROCEDURE asterisk_printer (n INT) 
     BEGIN 
         WHILE n >= 1 DO 
-            SELECT repeat('* ', n);
+            SELECT REPEAT('* ', n);
             SET n = n - 1;
             END WHILE;
     END; $$
     
 CALL asterisk_printer(20);
 # Source: https://yourdigitalaid.com/hackerrank-draw-the-triangle-1-sql-solution/
+
+
+
+# Solution 03
+DELIMITER $$
+CREATE PROCEDURE pattern()
+BEGIN
+    DECLARE star_count INT;
+    SET star_count = 20;
+    
+    WHILE (star_count >= 1) DO
+        SELECT REPEAT('* ', star_count);
+        SET star_count = star_count - 1;
+    END WHILE;
+END $$
+DELIMITER ;
+
+CALL pattern;
 
 
 
