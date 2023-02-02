@@ -160,6 +160,32 @@ WHERE   referee_id != 2 OR referee_id IS NULL;
 
 
 
+# 586. Customer Placing the Largest Number of Orders
+SELECT      DISTINCT customer_number
+FROM        Orders
+GROUP BY    customer_number
+ORDER BY    COUNT(order_number) DESC
+LIMIT       1;
+
+
+
+# 595. Big Countries
+SELECT  name,
+        population,
+        area
+FROM    World
+WHERE   area >= 3000000 OR population >= 25000000;
+
+
+
+# 596. Classes More Than 5 Students
+SELECT      class
+FROM        Courses
+GROUP BY    class
+HAVING      COUNT(DISTINCT student) >= 5;
+
+
+
 # 601. Human Traffic of Stadium
 SELECT      DISTINCT T1.*
 FROM        Stadium AS T1, Stadium AS T2, Stadium AS T3
@@ -169,5 +195,35 @@ OR           (T2.id - T1.id = 1 AND T2.id - T3.id = 2 AND T1.id - T3.id = 1)
 OR           (T3.id - T2.id = 1 AND T2.id - T1.id = 1 AND T3.id - T1.id = 2)
 )
 ORDER BY    T1.id;
+
+
+
+# 607. Sales Person
+SELECT      name
+FROM        SalesPerson
+WHERE       name NOT IN
+(SELECT      S.name
+ FROM        SalesPerson AS S, Company As C, Orders AS O
+ WHERE       S.sales_id = O.sales_id AND C.com_id = O.com_id
+ AND         C.name = 'RED');
+ 
+ 
+ 
+ # 608. Tree Node
+ SELECT  id,
+        CASE
+        WHEN p_id IS NULL THEN 'Root'
+        WHEN id IN (SELECT p_id FROM Tree) THEN 'Inner'
+        ELSE 'Leaf'
+        END AS 'type'
+FROM    Tree;
+
+
+
+# 620. Not Boring Movies
+SELECT      *
+FROM        Cinema
+WHERE       MOD(id, 2) = 1 AND description != 'boring'
+ORDER BY    rating DESC;
 
 
