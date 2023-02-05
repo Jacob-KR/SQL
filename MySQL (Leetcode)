@@ -227,3 +227,33 @@ WHERE       MOD(id, 2) = 1 AND description != 'boring'
 ORDER BY    rating DESC;
 
 
+
+# 626. Exchange Seats
+WITH T1 AS  (
+SELECT      id,
+            student,
+            LEAD(student) OVER(ORDER BY id ASC) AS 'student2',
+            LAG(student) OVER(ORDER BY id ASC) AS 'student3'
+FROM        Seat)
+SELECT      id,
+            CASE
+            WHEN student2 IS NOT NULL AND MOD(id, 2) = 1 THEN student2
+            WHEN student2 IS NOT NULL AND MOD(id, 2) = 0 THEN student3
+            WHEN student2 IS NULL AND MOD(id, 2) = 1 THEN student
+            WHEN student2 IS NULL AND MOD(id, 2) = 0 THEN student3
+            END  'student'
+FROM        T1
+ORDER BY    id ASC;
+
+
+
+# 627. Swap Salary
+UPDATE  Salary
+SET
+    sex =
+        CASE
+        WHEN sex = 'm' THEN 'f'
+        WHEN sex = 'f' THEN 'm'
+        END;
+
+
