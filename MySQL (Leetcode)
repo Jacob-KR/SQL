@@ -287,3 +287,13 @@ SELECT      activity_date AS 'day',
 FROM        Activity
 WHERE       activity_date BETWEEN DATE_SUB('2019-07-27', INTERVAL 29 DAY) AND '2019-07-27'
 GROUP BY    activity_date;
+
+
+
+# 1148. Article Views I
+SELECT      DISTINCT author_id AS 'id'
+FROM        Views
+WHERE       author_id = viewer_id
+ORDER BY    author_id ASC;
+
+
