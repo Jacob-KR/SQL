@@ -278,3 +278,12 @@ LEFT JOIN   Sales s
 ON          p.product_id = s.product_id
 GROUP BY    p.product_id
 HAVING      SUM(s.sale_date between '2019-01-01' and '2019-03-31') = COUNT(s.sale_date);
+
+
+
+# 1141. User Activity for the Past 30 Days I
+SELECT      activity_date AS 'day',
+            COUNT(DISTINCT user_id) AS 'active_users'
+FROM        Activity
+WHERE       activity_date BETWEEN DATE_SUB('2019-07-27', INTERVAL 29 DAY) AND '2019-07-27'
+GROUP BY    activity_date;
