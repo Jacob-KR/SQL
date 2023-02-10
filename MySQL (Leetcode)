@@ -312,3 +312,88 @@ ORDER BY    U.user_id;
 
 
 # 1179. Reformat Department Table
+SELECT      id,
+            MAX(CASE
+                WHEN month = 'Jan' THEN revenue
+                ELSE NULL
+                END) AS 'Jan_Revenue',
+            MAX(CASE
+                WHEN month = 'Feb' THEN revenue
+                ELSE NULL
+                END) AS 'Feb_Revenue',
+            MAX(CASE
+                WHEN month = 'Mar' THEN revenue
+                ELSE NULL
+                END) AS 'Mar_Revenue',
+            MAX(CASE
+                WHEN month = 'Apr' THEN revenue
+                ELSE NULL
+                END) AS 'Apr_Revenue',
+            MAX(CASE
+                WHEN month = 'May' THEN revenue
+                ELSE NULL
+                END) AS 'May_Revenue',
+            MAX(CASE
+                WHEN month = 'Jun' THEN revenue
+                ELSE NULL
+                END) AS 'Jun_Revenue',
+            MAX(CASE
+                WHEN month = 'Jul' THEN revenue
+                ELSE NULL
+                END) AS 'Jul_Revenue',
+            MAX(CASE
+                WHEN month = 'Aug' THEN revenue
+                ELSE NULL
+                END) AS 'Aug_Revenue',
+            MAX(CASE
+                WHEN month = 'Sep' THEN revenue
+                ELSE NULL
+                END) AS 'Sep_Revenue',
+            MAX(CASE
+                WHEN month = 'Oct' THEN revenue
+                ELSE NULL
+                END) AS 'Oct_Revenue',
+            MAX(CASE
+                WHEN month = 'Nov' THEN revenue
+                ELSE NULL
+                END) AS 'Nov_Revenue',
+            MAX(CASE
+                WHEN month = 'Dec' THEN revenue
+                ELSE NULL
+                END) AS 'Dec_Revenue'
+FROM        Department
+GROUP BY    id
+ORDER BY    id ASC;
+
+
+
+# 1393. Capital Gain/Loss
+SELECT      stock_name,
+            SUM(calculated_price) AS 'capital_gain_loss'
+FROM        (
+SELECT      *,
+            CASE
+            WHEN operation = 'Buy' THEN -1*price
+            WHEN operation = 'Sell' THEN price
+            END AS 'calculated_price'
+FROM        Stocks) AS Cal_Table
+GROUP BY    stock_name;
+
+
+
+# 1407. Top Travellers
+SELECT      T1.name,
+            T1.travelled_distance
+FROM        (
+SELECT      U.id,
+            U.name,
+            IF(SUM(R.distance) IS NOT NULL, SUM(R.distance), 0) AS 'travelled_distance'
+FROM        Users AS U
+LEFT JOIN   Rides AS R
+ON          U.id = R.user_id
+GROUP BY    U.id, U.name) AS T1
+ORDER BY    T1.travelled_distance DESC, T1.name ASC;
+
+
+
+# 1484. Group Sold Products By The Date
