@@ -446,3 +446,43 @@ INNER JOIN  Users AS U
 ON          T1.account = U.account;
 
 
+
+# 1667. Fix Names in a Table
+SELECT      user_id,
+            CONCAT(UPPER(SUBSTR(name, 1, 1)), LOWER(SUBSTR(name, 2))) AS 'name'
+FROM        Users
+ORDER BY    user_id;
+
+
+
+# 1693. Daily Leads and Partners
+SELECT      date_id,
+            make_name,
+            COUNT(DISTINCT lead_id) AS 'unique_leads',
+            COUNT(DISTINCT partner_id) AS 'unique_partners'
+FROM        DailySales
+GROUP BY    date_id, make_name;
+
+
+
+# 1729. Find Follwers Count
+SELECT      user_id,
+            COUNT(DISTINCT follower_id) AS 'followers_count'
+FROM        Followers
+GROUP BY    user_id;
+
+
+
+# 1741. Find Total Times Spent by Each Employee
+SELECT      event_day AS 'day',
+            emp_id,
+            SUM(out_time - in_time) AS 'total_time'
+FROM        Employees
+GROUP BY    event_day, emp_id;
+
+
+
+# 1757. Recyclable and Low Fat Products
+SELECT  product_id
+FROM    Products
+WHERE   low_fats = 'Y' AND recyclable = 'Y';
