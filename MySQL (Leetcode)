@@ -522,3 +522,37 @@ SELECT      employee_id,
             END AS 'bonus'
 FROM        Employees
 ORDER BY    employee_id;
+
+
+
+# 1890. The Lastest Login in 2020
+SELECT      user_id,
+            MAX(time_stamp) AS 'last_stamp'
+FROM        Logins
+WHERE       YEAR(time_stamp) = '2020'
+GROUP BY    user_id;
+
+
+
+# 1965. Employees With Missing Information
+WITH T1 AS  (
+SELECT      E.employee_id,
+            name,
+            salary
+FROM        Employees AS E
+LEFT JOIN   Salaries AS S
+ON          E.employee_id = S.employee_id
+
+UNION
+
+SELECT      S.employee_id,
+            name,
+            salary
+FROM        Employees AS E
+RIGHT JOIN  Salaries AS S
+ON          E.employee_id = S.employee_id)
+
+SELECT      employee_id
+FROM        T1
+WHERE       name IS NULL or salary IS NULL
+ORDER BY    employee_id ASC;
