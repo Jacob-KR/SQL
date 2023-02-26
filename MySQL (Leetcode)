@@ -171,7 +171,7 @@ WHERE       A.event_date = T.first_logged;
 # 534. Game Play Analysis III
 SELECT  player_id,
         event_date,
-        SUM(games_played) OVER(PARTITION BY player_id ROWS UNBOUNDED PRECEDING) AS 'games_played_so_far'
+        SUM(games_played) OVER(PARTITION BY player_id ORDER BY event_date ROWS UNBOUNDED PRECEDING) AS 'games_played_so_far'
 FROM    Activity;
 
 
