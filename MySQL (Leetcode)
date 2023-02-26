@@ -153,6 +153,29 @@ GROUP BY    player_id;
 
 
 
+# 512. Game Play Analysis II
+WITH T1 AS (
+SELECT      player_id,
+            MIN(event_date) AS 'first_logged'
+FROM        Activity
+GROUP BY    player_id)
+SELECT      A.player_id,
+            device_id
+FROM        Activity AS A
+INNER JOIN  T1 AS T
+ON          A.player_id = T.player_id
+WHERE       A.event_date = T.first_logged;
+
+
+
+# 534. Game Play Analysis III
+SELECT  player_id,
+        event_date,
+        SUM(games_played) OVER(PARTITION BY player_id ROWS UNBOUNDED PRECEDING) AS 'games_played_so_far'
+FROM    Activity;
+
+
+
 # 584. Find Customer Referee
 SELECT  name
 FROM    Customer
