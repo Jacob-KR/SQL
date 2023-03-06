@@ -223,6 +223,32 @@ ORDER BY    company, salary;
 
 
 
+# 570. Managers with at Least % Diredct Reports
+SELECT      E1.name
+FROM        Employee AS E1
+INNER JOIN  Employee AS E2
+ON          E1.id = E2.managerId
+WHERE       E2.managerId IS NOT NULL
+GROUP BY    E1.name
+HAVING      COUNT(E2.managerID) >= 5;
+
+
+
+# 571. Find Median Given Frequency of Numbers
+WITH T1 AS (
+SELECT      num,
+            frequency,
+            SUM(frequency) OVER(ORDER BY num ASC) AS 'frequency_sum',
+            (SUM(frequency) OVER() / 2) AS 'median_order'
+FROM        Numbers)
+
+SELECT      num AS 'median'
+FROM        T1
+WHERE       (frequency_sum - median_order)
+            = (SELECT MIN(frequency_sum - median_order) FROM T1);
+
+
+
 # 584. Find Customer Referee
 SELECT  name
 FROM    Customer
