@@ -263,6 +263,38 @@ LIMIT       1;
 
 
 
+# 577. Employee Bonus
+SELECT      name,
+            bonus
+FROM        (
+SELECT      name,
+            bonus
+FROM        Employee AS E
+LEFT JOIN   Bonus AS B
+ON          E.empID = B.empID) T1
+WHERE       bonus < 1000 OR bonus IS NULL;
+
+
+
+# 578. Get Highest Answer Rate Question
+WITH T1 AS (
+SELECT      action,
+            question_id,
+            IF(action = 'show', 1, 0) AS 'show_dummy',
+            IF(action = 'answer', 1, 0) AS 'answer_dummy'
+FROM        SurveyLog),
+     T2 AS (
+SELECT      question_id,
+            IF((SUM(answer_dummy) / SUM(show_dummy)) > 0, (SUM(answer_dummy) / SUM(show_dummy)), 0.0) AS 'p'
+FROM        T1
+GROUP BY    question_id)
+SELECT      question_id AS 'survey_log'
+FROM        T2
+ORDER BY    p DESC, question_id ASC
+LIMIT       1;
+
+
+
 # 584. Find Customer Referee
 SELECT  name
 FROM    Customer
