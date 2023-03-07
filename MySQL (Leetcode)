@@ -295,6 +295,30 @@ LIMIT       1;
 
 
 
+# 579. Find Cumulative Salary of an Employee
+SELECT      E.id,
+            E.month,
+            SUM(E2.salary) AS salary
+FROM        Employee AS E
+INNER JOIN  Employee AS E2
+ON          E.id = E2.id AND E.month >= E2.month AND (E.month - E2.month <= 2)
+WHERE       E.month < (SELECT MAX(month) FROM Employee WHERE id = E.id)
+GROUP BY    E.id, E.month
+ORDER BY    E.id ASC, E.month DESC;
+
+
+
+# 580. Count Student Number in Departments
+SELECT      dept_name,
+            COUNT(student_name) AS 'student_number'
+FROM        Department AS D
+LEFT JOIN   Student AS S
+ON          D.dept_id = S.dept_id
+GROUP BY    dept_name
+ORDER BY    COUNT(student_name) DESC, dept_name ASC;
+
+
+
 # 584. Find Customer Referee
 SELECT  name
 FROM    Customer
