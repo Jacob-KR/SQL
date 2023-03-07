@@ -239,13 +239,13 @@ WITH T1 AS (
 SELECT      num,
             frequency,
             SUM(frequency) OVER(ORDER BY num ASC) AS 'frequency_sum',
+            SUM(frequency) OVER() AS 'total_sum',
             (SUM(frequency) OVER() / 2) AS 'median_order'
 FROM        Numbers)
 
-SELECT      num AS 'median'
+SELECT      ROUND((SUM(num) / COUNT(num)), 2) AS 'median'
 FROM        T1
-WHERE       (frequency_sum - median_order)
-            = (SELECT MIN(frequency_sum - median_order) FROM T1);
+WHERE       (total_sum / 2) BETWEEN frequency_sum - frequency AND total_sum; 
 
 
 
