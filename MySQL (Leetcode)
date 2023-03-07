@@ -249,6 +249,20 @@ WHERE       (total_sum / 2) BETWEEN frequency_sum - frequency AND total_sum;
 
 
 
+# 574. Winning Candidate
+SELECT      name
+FROM        (
+SELECT      name,
+            COUNT(*) AS 'vote'
+FROM        Candidate AS C
+INNER JOIN  Vote AS V
+ON          C.id = V.candidateId
+GROUP BY    name) vote_count
+ORDER BY    vote DESC
+LIMIT       1;
+
+
+
 # 584. Find Customer Referee
 SELECT  name
 FROM    Customer
