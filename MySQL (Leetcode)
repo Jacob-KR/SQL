@@ -399,6 +399,25 @@ ORDER BY    T1.id;
 
 
 
+# 602. Friend Requests II: Who Has the Most Friends
+WITH T1 AS (
+SELECT      requester_id AS 'count_num'
+FROM        RequestAccepted
+
+UNION ALL
+
+SELECT      accepter_id AS 'count_num'
+FROM        RequestAccepted)
+
+SELECT      count_num AS 'id',
+            COUNT(count_num) AS 'num'
+FROM        T1
+GROUP BY    count_num
+ORDER BY    COUNT(count_num) DESC
+LIMIT       1;
+
+
+
 # 607. Sales Person
 SELECT      name
 FROM        SalesPerson
