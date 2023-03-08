@@ -326,6 +326,27 @@ WHERE   referee_id != 2 OR referee_id IS NULL;
 
 
 
+# 585. Investments in 2016
+WITH T1 AS (
+SELECT      pid,
+            tiv_2015,
+            tiv_2016,
+            CONCAT(lat, lon) AS 'location',
+            COUNT(CONCAT(lat, lon)) OVER(PARTITION BY CONCAT(lat, lon)) AS 'c_location'
+FROM        Insurance),
+     T2 AS (
+SELECT      DISTINCT I1.pid,
+            I1.tiv_2015,
+            I1.tiv_2016
+FROM        T1 AS I1
+INNER JOIN  T1 AS I2
+ON          I1.tiv_2015 = I2.tiv_2015 AND I1.pid != I2.pid
+WHERE       I1.c_location < 2)
+SELECT      ROUND(SUM(tiv_2016), 2) AS 'tiv_2016'
+FROM        T2;
+
+
+
 # 586. Customer Placing the Largest Number of Orders
 SELECT      DISTINCT customer_number
 FROM        Orders
@@ -349,6 +370,20 @@ SELECT      class
 FROM        Courses
 GROUP BY    class
 HAVING      COUNT(DISTINCT student) >= 5;
+
+
+
+# 597.Friend Requests I: Overall Acceptance Rate
+WITH T1 AS (
+SELECT      *,
+            CONCAT(sender_id, send_to_id) AS 'requests'
+FROM        FriendRequest),
+     T2 AS (
+SELECT      *,
+            CONCAT(requester_id, accepter_id) AS 'accepted_requests'
+FROM        RequestAccepted)
+SELECT      DISTINCT ROUND(IFNULL(((SELECT COUNT(DISTINCT accepted_requests) FROM T2) /
+            (SELECT COUNT(DISTINCT requests) FROM T1)), 0), 2) AS 'accept_rate';
 
 
 
