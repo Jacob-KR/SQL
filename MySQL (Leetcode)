@@ -418,6 +418,17 @@ LIMIT       1;
 
 
 
+# 603. Consecutive Available Seats
+SELECT      seat_id
+FROM        (
+SELECT      seat_id,
+            free,
+            SUM(free) OVER(ORDER BY seat_id ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) AS 'free_2'
+FROM        Cinema) T1
+WHERE       free + free_2 >= 3
+
+
+
 # 607. Sales Person
 SELECT      name
 FROM        SalesPerson
@@ -437,6 +448,34 @@ WHERE       name NOT IN
         ELSE 'Leaf'
         END AS 'type'
 FROM    Tree;
+
+
+
+# 610. Triangle Judgement
+SELECT  x,
+        y,
+        z,
+        IF((x + y <= z) OR (y + z <= x) OR (z + x <= y), 'No', 'Yes') AS 'triangle'
+FROM    Triangle;
+
+
+
+# 612. Shortest Distance in a Plane
+WITH T1 AS (
+SELECT      P1.x AS 'x1',
+            P1.y AS 'y1',
+            P2.x AS 'x2',
+            P2.y AS 'y2'
+FROM        Point2D AS P1
+CROSS JOIN  Point2D AS P2),
+     T2 AS (
+SELECT      *,
+            CONCAT(x1, y1) AS 'xy1',
+            CONCAT(x2, y2) AS 'xy2'
+FROM        T1)
+SELECT      ROUND(MIN(SQRT(POW((x1 - x2), 2) + POW((y1 - y2), 2))), 2) AS 'shortest'
+FROM        T2
+WHERE       xy1 != xy2;
 
 
 
