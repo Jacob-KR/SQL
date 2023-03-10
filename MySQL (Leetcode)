@@ -479,6 +479,34 @@ WHERE       xy1 != xy2;
 
 
 
+# 613. Shortest Distance in a Line
+SELECT      MIN(ABS(x1 - x2)) AS 'shortest'
+FROM        (
+SELECT      P1.x AS 'x1',
+            P2.x AS 'x2'
+FROM        Point AS P1
+CROSS JOIN  Point AS P2) T1
+WHERE       x1 != x2;
+
+
+
+# 614. Second Degree Follower
+WITH T1 AS (
+SELECT      F1.followee AS followee,
+            F1.follower AS follower,
+            F2.follower AS follower2
+FROM        Follow AS F1
+INNER JOIN  Follow AS F2
+ON          F1.follower = F2.followee)
+
+SELECT      follower,
+            COUNT(DISTINCT follower2) AS 'num'
+FROM        T1
+GROUP BY    follower
+ORDER BY    follower ASC;
+
+
+
 # 620. Not Boring Movies
 SELECT      *
 FROM        Cinema
