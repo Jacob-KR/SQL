@@ -507,6 +507,36 @@ ORDER BY    follower ASC;
 
 
 
+# 615. Average Salary: Departments VS Company
+WITH T1 AS (
+SELECT      pay_month,
+            department_id,
+            AVG(amount) AS 'avg_salary',
+            company_salary
+FROM        (
+SELECT      id,
+            S.employee_id,
+            E.department_id,
+            amount,
+            pay_date,
+            CONCAT(SUBSTR(pay_date, 1, 4), "-", SUBSTR(pay_date, 6, 2)) AS 'pay_month',
+            AVG(amount) OVER(PARTITION BY SUBSTR(pay_date, 1, 7)) AS 'company_salary'
+FROM        Salary AS S
+INNER JOIN  Employee AS E
+ON          S.employee_id = E.employee_id) SubTable
+GROUP BY    pay_month, department_id)
+
+SELECT      pay_month,
+            department_id,
+            CASE
+            WHEN avg_salary > company_salary THEN 'higher'
+            WHEN avg_salary = company_salary THEN 'same'
+            ELSE 'lower'
+            END AS 'comparison'
+FROM        T1;
+
+
+
 # 620. Not Boring Movies
 SELECT      *
 FROM        Cinema
