@@ -10,12 +10,23 @@ ON          P.personId = A.personId;
 
 
 # 176. Second Highest Salary
+# Solution 01
 SELECT  (CASE
          WHEN COUNT(salary) = 1 THEN NULL
          ELSE (SELECT salary FROM Employee
                WHERE salary != (SELECT MAX(salary) FROM Employee) ORDER BY salary DESC LIMIT 1)
         END) AS 'SecondHighestSalary'
 FROM    Employee;
+
+# Solution 02
+SELECT      MAX(CASE
+            WHEN ranking = 2 THEN salary
+            ELSE NULL
+            END) AS 'SecondHighestSalary'
+FROM        (
+SELECT      salary,
+            DENSE_RANK() OVER(ORDER BY salary DESC) AS 'ranking'
+FROM        Employee) Rank_Table;
 
 
 
