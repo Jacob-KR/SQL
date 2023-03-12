@@ -537,6 +537,43 @@ FROM        T1;
 
 
 
+# 618. Students Report By Geography
+SELECT      America,
+            Asia,
+            Europe
+FROM        (
+SELECT      ROW_NUMBER() OVER() AS 'rn1',
+            name AS 'America'
+FROM        Student
+WHERE       continent = 'America'
+ORDER BY    name ASC) America_Table
+LEFT JOIN   (
+SELECT      ROW_NUMBER() OVER() AS 'rn2',
+            name AS 'Asia'
+FROM        Student
+WHERE       continent = 'Asia'
+ORDER BY    name ASC) Asia_Table
+ON          America_Table.rn1 = Asia_Table.rn2
+LEFT JOIN   (
+SELECT      ROW_NUMBER() OVER() AS 'rn3',
+            name AS 'Europe'
+FROM        Student
+WHERE       continent = 'Europe'
+ORDER BY    name ASC) Europe_Table
+ON          America_Table.rn1 = Europe_Table.rn3;
+
+
+
+# 619. Biggest Single Number
+SELECT      MAX(num) AS 'num'
+FROM        (
+SELECT      num,
+            COUNT(*) OVER(PARTITION BY num) AS 'cnt'
+FROM        MyNumbers) T1
+WHERE       cnt < 2;
+
+
+
 # 620. Not Boring Movies
 SELECT      *
 FROM        Cinema
