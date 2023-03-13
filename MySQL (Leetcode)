@@ -623,6 +623,17 @@ SET
 
 
 
+# 1045. Customers Who Bought All Products
+SELECT      customer_id
+FROM        (
+SELECT      customer_id,
+            COUNT(DISTINCT product_key) AS 'cnt'
+FROM        Customer
+GROUP BY    customer_id) SubTable
+WHERE       cnt = (SELECT COUNT(DISTINCT product_key) FROM Customer);
+
+
+
 # 1050. Actors and Directors Who Cooperated At Least Three Times
 SELECT      actor_id,
             director_id
@@ -633,6 +644,16 @@ SELECT      actor_id,
 FROM        ActorDirector
 GROUP BY    actor_id, director_id) AS T1
 WHERE       pair_count >= 3;
+
+
+
+# 1068. Product Sales Analysis I
+SELECT      P.product_name,
+            S.year,
+            S.price
+FROM        Sales AS S
+INNER JOIN  Product AS P
+ON          S.product_id = P.product_id;
 
 
 
