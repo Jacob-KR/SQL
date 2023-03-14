@@ -49,8 +49,7 @@ END
 # 178. Rank Scores
 SELECT      score,
             DENSE_RANK() OVER(ORDER BY score DESC) AS 'rank'
-FROM        Scores
-ORDER BY    score DESC;
+FROM        Scores;
 
 
 
@@ -654,6 +653,30 @@ SELECT      P.product_name,
 FROM        Sales AS S
 INNER JOIN  Product AS P
 ON          S.product_id = P.product_id;
+
+
+
+1069. Product Sales Analysis II
+SELECT      product_id,
+            SUM(quantity) AS 'total_quantity'
+FROM        Sales
+GROUP BY    product_id;
+
+
+
+# 1070. Product Sales Analysis III
+SELECT      product_id,
+            year AS 'first_year',
+            quantity,
+            price
+FROM        (
+SELECT      product_id,
+            year,
+            quantity,
+            price,
+            MIN(year) OVER(PARTITION BY product_id) AS 'f_year'
+FROM        Sales) SubTable
+WHERE       year = f_year;
 
 
 
