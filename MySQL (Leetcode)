@@ -827,6 +827,33 @@ ORDER BY    id ASC;
 
 
 
+# 1082. Sales Analysis I
+SELECT      seller_id
+FROM        (
+SELECT      seller_id,
+            SUM(price) AS 'total_sales_price',
+            DENSE_RANK() OVER(ORDER BY SUM(price) DESC) AS 'rank'
+FROM        Sales
+GROUP BY    seller_id) SubTable
+WHERE       SubTable.rank = 1;
+
+
+# 1083. Sales Analysis II
+WITH T1 AS (
+SELECT      P.product_id,
+            buyer_id,
+            product_name
+FROM        Product AS P
+INNER JOIN  Sales AS S
+ON          P.product_id = S.product_id)
+
+SELECT      DISTINCT buyer_id
+FROM        T1
+WHERE       buyer_id IN (SELECT buyer_id FROM T1 WHERE product_name = 'S8')
+            AND buyer_id NOT IN (SELECT buyer_id FROM T1 WHERE product_name = 'iPhone');
+
+
+
 # 1393. Capital Gain/Loss
 SELECT      stock_name,
             SUM(calculated_price) AS 'capital_gain_loss'
