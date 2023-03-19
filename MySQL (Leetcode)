@@ -741,6 +741,27 @@ HAVING      SUM(s.sale_date between '2019-01-01' and '2019-03-31') = COUNT(s.sal
 
 
 
+# 1097. Game Play Analysis V
+SELECT    T1.install_date AS 'install_dt',
+          COUNT(T1.install_date) AS 'installs',
+          ROUND(COUNT(event_date) / COUNT(*), 2) AS 'Day1_retention'
+FROM      (
+SELECT    player_id,
+          MIN(event_date) AS 'install_date'
+FROM      Activity
+GROUP BY  player_id) AS T1
+LEFT JOIN Activity AS T2
+ON        DATE_ADD(T1.install_date, INTERVAL 1 DAY) = T2.event_date
+          AND T1.player_id = T2.player_id
+GROUP BY  T1.install_date;
+
+
+
+# 1098. Unpopular Books
+
+
+
+
 # 1141. User Activity for the Past 30 Days I
 SELECT      activity_date AS 'day',
             COUNT(DISTINCT user_id) AS 'active_users'
