@@ -758,6 +758,54 @@ GROUP BY  T1.install_date;
 
 
 # 1098. Unpopular Books
+WITH  T1 AS (
+SELECT      B.book_id,
+            B.name
+FROM        Books AS B
+LEFT JOIN   Orders AS O
+ON          B.book_id = O.book_id
+WHERE       DATEDIFF('2019-06-23', B.available_from) > 31
+GROUP BY    B.book_id, B.name),
+      T2 AS (
+SELECT      book_id,
+            SUM(quantity) AS 'book_q'
+FROM        Orders
+WHERE       dispatch_date BETWEEN '2018-06-24' AND '2019-06-23'
+GROUP BY    book_id)
+SELECT      T1.book_id,
+            T1.name
+FROM        T1
+WHERE       T1.book_id NOT IN
+            (SELECT book_id FROM T2 WHERE book_q >= 10);
+            
+ 
+
+# 1107. New Users Daily Count
+WITH T1 AS (
+SELECT      user_id,
+            MIN(activity_date) AS 'first_login_date'
+FROM        Traffic
+WHERE       activity = 'login'
+GROUP BY    user_id)
+SELECT      activity_date AS 'login_date',
+            COUNT(DISTINCT T.user_id) AS 'user_count'
+FROM        Traffic AS T
+INNER JOIN  T1
+ON          T.user_id = T1.user_id AND T.activity_date = T1.first_login_date
+WHERE       DATEDIFF('2019-06-30', activity_date) <= 90
+GROUP BY    activity_date;
+
+
+
+# 1112. Highest Grade For Each Student
+SELECT    student_id,
+          MIN(course_id) AS 'course_id',
+          grade
+FROM      Enrollments
+WHERE     (student_id, grade) IN
+          (SELECT student_id, MAX(grade) FROM Enrollments GROUP BY student_id)
+GROUP BY  student_id
+ORDER BY  student_id;
 
 
 
