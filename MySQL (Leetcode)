@@ -79,9 +79,15 @@ WHERE       E1.salary > E2.salary;
 
 
 # 182. Duplicate Emails
+# Solution 01
 SELECT  DISTINCT email AS 'Email'
 FROM    Person
 WHERE   email IN (SELECT email FROM Person GROUP BY email HAVING COUNT(email) > 1);
+# Solution 02
+SELECT      email
+FROM        Person
+GROUP BY    email
+HAVING      COUNT(email) > 1; 
 
 
 
@@ -806,6 +812,41 @@ WHERE     (student_id, grade) IN
           (SELECT student_id, MAX(grade) FROM Enrollments GROUP BY student_id)
 GROUP BY  student_id
 ORDER BY  student_id;
+
+
+
+# 1113. Reported Posts
+SELECT      extra AS 'report_reason',
+            COUNT(DISTINCT post_id) AS 'report_count'
+FROM        Actions
+WHERE       action = 'report'
+            AND DATEDIFF('2019-07-05', action_date) = 1
+GROUP BY    extra;
+
+
+
+# 1126. Active Businesses
+WITH T1 AS  (
+SELECT      E.business_id,
+            E.event_type,
+            E.occurences,
+            T.average
+FROM        Events AS E
+INNER JOIN  (
+SELECT      event_type,
+            AVG(occurences) AS 'average'
+FROM        Events
+GROUP BY    event_type) AS T
+ON          E.event_type = T.event_type
+            AND E.occurences > T.average)
+SELECT      business_id
+FROM        T1
+GROUP BY    business_id
+HAVING      COUNT(*) > 1;
+
+
+
+# 1127. User Purchase Platform
 
 
 
