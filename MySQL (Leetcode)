@@ -721,7 +721,7 @@ WHERE       SubTable.rank = 1;
 
 
 
-# Project Employees III
+# 1077. Project Employees III
 WITH T1 AS (
 SELECT      P.project_id,
             P.employee_id,
@@ -848,6 +848,17 @@ HAVING      COUNT(*) > 1;
 
 # 1127. User Purchase Platform
 
+
+
+# 1132. Reported Posts II
+SELECT      ROUND(AVG(daily_percent), 2) AS 'average_daily_percent'
+FROM        (
+SELECT      (COUNT(DISTINCT R.post_id) / COUNT(DISTINCT A.post_id))*100 AS 'daily_percent'
+FROM        Actions AS A
+LEFT JOIN   Removals AS R
+ON          A.post_id = R.post_id
+WHERE       extra = 'spam'
+GROUP BY    action_date) AS subtable;
 
 
 
