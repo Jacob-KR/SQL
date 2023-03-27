@@ -871,11 +871,35 @@ GROUP BY    activity_date;
 
 
 
+# 1142. User Activity for the Past 30 Days II
+SELECT      IFNULL(ROUND(AVG(cnt), 2), 0) AS 'average_sessions_per_user'
+FROM        (
+SELECT      user_id,
+            COUNT(DISTINCT session_id) AS 'cnt'
+FROM        Activity
+WHERE       DATEDIFF('2019-07-27', activity_date) <= 29
+GROUP BY    user_id) subtable
+
+
+
 # 1148. Article Views I
 SELECT      DISTINCT author_id AS 'id'
 FROM        Views
 WHERE       author_id = viewer_id
 ORDER BY    author_id ASC;
+
+
+
+# 1149. Article Views II
+SELECT      DISTINCT viewer_id AS 'id'
+FROM        (
+SELECT      viewer_id,
+            view_date,
+            GROUP_CONCAT(DISTINCT article_id) AS 'concat_article_id'
+FROM        Views
+GROUP BY    viewer_id, view_date) subtable
+WHERE       concat_article_id LIKE '%,%'
+ORDER BY    viewer_id ASC;
 
 
 
