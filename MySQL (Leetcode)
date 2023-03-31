@@ -916,6 +916,22 @@ ORDER BY    U.user_id;
 
 
 
+# 1164. Product Price at a Given Date
+WITH T1 AS (
+SELECT    product_id,
+          new_price,
+          RANK() OVER(PARTITION BY product_id ORDER BY change_date DESC) AS 'rnk'
+FROM      Products
+WHERE     change_date <= '2019-08-16')
+
+SELECT    DISTINCT P.product_id,
+          COALESCE(P2.new_price, 10) AS 'price'
+FROM      Products AS P
+LEFT JOIN (SELECT * FROM T1 WHERE rnk=1) as P2
+ON        P.product_id = P2.product_id; 
+
+
+
 # 1179. Reformat Department Table
 SELECT      id,
             MAX(CASE
