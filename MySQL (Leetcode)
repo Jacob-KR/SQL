@@ -943,6 +943,34 @@ ORDER BY    U.user_id;
 
 
 
+# 1159. Market Analysis II
+WITH  T1 AS (
+SELECT      U.user_id,
+            U.favorite_brand,
+            O.order_date,
+            RANK() OVER(PARTITION BY U.user_id ORDER BY O.order_date) AS 'date_rank',
+            O.seller_id,
+            I.item_id,
+            I.item_brand
+FROM        Users AS U
+LEFT JOIN   Orders AS O
+ON          U.user_id = O.seller_id
+LEFT JOIN   Items AS I
+ON          O.item_id = I.item_id
+ORDER BY    U.user_id, O.order_date),
+      T2 AS (
+SELECT      seller_id,
+            favorite_brand
+FROM        T1
+WHERE       (date_rank = 2) AND (favorite_brand = item_brand))
+SELECT      DISTINCT T1.user_id AS 'seller_id',
+            IF(T2.seller_id IS NULL, 'no', 'yes') AS '2nd_item_fav_brand'
+FROM        T1
+LEFT JOIN   T2
+ON          T1.seller_id = T2.seller_id;
+
+
+
 # 1164. Product Price at a Given Date
 WITH T1 AS (
 SELECT    product_id,
