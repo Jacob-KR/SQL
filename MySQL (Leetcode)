@@ -1091,6 +1091,21 @@ GROUP BY    month, country;
 
 
 
+# 1204. Last Person to Fit in the Bus
+SELECT      person_name
+FROM        (
+SELECT      person_name,
+            weight,
+            turn,
+            SUM(weight) OVER(ORDER BY turn ASC) AS 'cum_sum'
+FROM        Queue
+ORDER BY    turn ASC) subtable
+WHERE       cum_sum <= 1000
+ORDER BY    turn DESC
+LIMIT       1;
+
+
+
 # 1393. Capital Gain/Loss
 SELECT      stock_name,
             SUM(calculated_price) AS 'capital_gain_loss'
