@@ -1152,6 +1152,24 @@ SELECT      trans_date2 AS 'month',
 
 
 
+# 1211. Queries Quality and Percentage
+SELECT      query_name,
+            ROUND(SUM(quality_percentage) / COUNT(*), 2) AS 'quality',
+            ROUND((SUM(poor_quality) / COUNT(*))*100, 2) AS 'poor_query_percentage' 
+FROM        (
+SELECT      *,
+            (rating / position) AS 'quality_percentage',
+            IF(rating < 3, 1, 0) AS 'poor_quality'
+FROM        Queries) AS subtable
+GROUP BY    query_name;
+
+
+
+# 1212. Team Scores in Football Tournament
+
+
+
+
 # 1393. Capital Gain/Loss
 SELECT      stock_name,
             SUM(calculated_price) AS 'capital_gain_loss'
