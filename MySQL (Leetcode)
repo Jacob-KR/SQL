@@ -1166,7 +1166,49 @@ GROUP BY    query_name;
 
 
 # 1212. Team Scores in Football Tournament
-
+WITH T1 AS  (
+SELECT      team_id,
+            team_name,
+            host_team,
+            guest_team,
+            IFNULL(
+            CASE
+            WHEN host_goals > guest_goals THEN 3
+            WHEN host_goals = guest_goals THEN 1
+            ELSE 0
+            END, 0) AS 'host_point',
+            IFNULL(
+            CASE
+            WHEN host_goals < guest_goals THEN 3
+            WHEN host_goals = guest_goals THEN 1
+            ELSE 0
+            END, 0) AS 'guest_point'
+FROM        Teams AS T
+LEFT JOIN   Matches AS M1
+ON          T.team_id = M1.host_team),
+     T2 AS  (
+SELECT      host_team,
+            SUM(host_point) AS 'sum_hp'
+FROM        T1
+GROUP BY    host_team),
+     T3 AS  (
+SELECT      guest_team,
+            SUM(guest_point) AS 'sum_gp'
+FROM        T1
+GROUP BY    guest_team),
+     T4 AS  (
+SELECT      host_team,
+            (sum_hp + sum_gp) AS 'num_points'
+FROM        T2
+INNER JOIN  T3
+ON          T2.host_team = T3.guest_team)
+SELECT      Ts.team_id,
+            Ts.team_name,
+            IFNULL(T4.num_points, 0) AS 'num_points'
+FROM        Teams AS Ts
+LEFT JOIN   T4
+ON          Ts.team_id = T4.host_team
+ORDER BY    IFNULL(T4.num_points, 0) DESC, Ts.team_id ASC;
 
 
 
@@ -1181,6 +1223,21 @@ SELECT      *,
             END AS 'calculated_price'
 FROM        Stocks) AS Cal_Table
 GROUP BY    stock_name;
+
+
+
+# 1251. Average Selling Price
+SELECT      product_id,
+            ROUND((SUM(multiply) / SUM(units)), 2) AS 'average_price'
+FROM        (
+SELECT      P.product_id,
+            (P.price * S.units) AS 'multiply',
+            S.units
+FROM        Prices AS P
+INNER JOIN  UnitsSold AS S
+ON          (S.purchase_date BETWEEN P.start_date AND P.end_date)
+            AND (P.product_id = S.product_id)) subtable
+GROUP BY    product_id;
 
 
 
