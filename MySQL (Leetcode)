@@ -1212,17 +1212,17 @@ ORDER BY    IFNULL(T4.num_points, 0) DESC, Ts.team_id ASC;
 
 
 
-# 1393. Capital Gain/Loss
-SELECT      stock_name,
-            SUM(calculated_price) AS 'capital_gain_loss'
+# 1241. Number of Comments per Post
+SELECT      post_id,
+            COUNT(DISTINCT sub_id) AS 'number_of_comments'
 FROM        (
-SELECT      *,
-            CASE
-            WHEN operation = 'Buy' THEN -1*price
-            WHEN operation = 'Sell' THEN price
-            END AS 'calculated_price'
-FROM        Stocks) AS Cal_Table
-GROUP BY    stock_name;
+SELECT      S1.sub_id AS 'post_id',
+            S2.sub_id
+FROM        Submissions AS S1
+LEFT JOIN   Submissions AS S2
+ON          S1.sub_id = S2.parent_id) subtable
+WHERE       post_id IN (SELECT sub_id FROM Submissions WHERE parent_id IS NULL)
+GROUP BY    post_id;
 
 
 
@@ -1238,6 +1238,20 @@ INNER JOIN  UnitsSold AS S
 ON          (S.purchase_date BETWEEN P.start_date AND P.end_date)
             AND (P.product_id = S.product_id)) subtable
 GROUP BY    product_id;
+
+
+
+# 1393. Capital Gain/Loss
+SELECT      stock_name,
+            SUM(calculated_price) AS 'capital_gain_loss'
+FROM        (
+SELECT      *,
+            CASE
+            WHEN operation = 'Buy' THEN -1*price
+            WHEN operation = 'Sell' THEN price
+            END AS 'calculated_price'
+FROM        Stocks) AS Cal_Table
+GROUP BY    stock_name;
 
 
 
