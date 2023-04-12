@@ -1247,6 +1247,19 @@ FROM      Likes
 WHERE     (user_id != 1) AND ((user_id IN (SELECT  user2_id FROM Friendship WHERE user1_id = 1))
           OR (user_id IN (SELECT  user1_id FROM Friendship WHERE user2_id = 1)))
           AND page_id NOT IN (SELECT page_id FROM Likes WHERE user_id = 1);
+          
+
+
+# 1280. Student and Examinations
+
+
+
+
+# 1270. All People Report to the Given Manager
+SELECT      E1.employee_id
+FROM        Employees AS E1, Employees AS E2, Employees AS E3
+WHERE       (E1.manager_id = E2.employee_id) AND (E2.manager_id = E3.employee_id) 
+            AND (E1.employee_id != E1.manager_id) AND (E3.manager_id = 1);
 
 
 
