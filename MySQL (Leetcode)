@@ -1251,7 +1251,27 @@ WHERE     (user_id != 1) AND ((user_id IN (SELECT  user2_id FROM Friendship WHER
 
 
 # 1280. Student and Examinations
-
+SELECT      T1.student_id,
+            T1.student_name,
+            T1.subject_name,
+            IFNULL(T2.cnt, 0) AS 'attended_exams'
+FROM        (
+SELECT      student_id,
+            student_name,
+            subject_name
+FROM        Students AS S
+CROSS JOIN  Subjects AS SB) T1
+LEFT JOIN   (
+SELECT      S.student_id,
+            S.student_name,
+            E.subject_name,
+            COUNT(*) AS 'cnt'
+FROM        Students AS S
+INNER JOIN  Examinations AS E
+ON          S.student_id = E.student_id
+GROUP BY    S.student_id, S.student_name, E.subject_name) T2
+ON          (T1.student_name = T2.student_name) AND (T1.subject_name = T2.subject_name)
+ORDER BY    T1.student_id, T1.subject_name;
 
 
 
