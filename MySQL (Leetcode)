@@ -1247,7 +1247,15 @@ FROM      Likes
 WHERE     (user_id != 1) AND ((user_id IN (SELECT  user2_id FROM Friendship WHERE user1_id = 1))
           OR (user_id IN (SELECT  user1_id FROM Friendship WHERE user2_id = 1)))
           AND page_id NOT IN (SELECT page_id FROM Likes WHERE user_id = 1);
-          
+
+
+
+# 1270. All People Report to the Given Manager
+SELECT      E1.employee_id
+FROM        Employees AS E1, Employees AS E2, Employees AS E3
+WHERE       (E1.manager_id = E2.employee_id) AND (E2.manager_id = E3.employee_id) 
+            AND (E1.employee_id != E1.manager_id) AND (E3.manager_id = 1);
+
 
 
 # 1280. Student and Examinations
@@ -1275,11 +1283,32 @@ ORDER BY    T1.student_id, T1.subject_name;
 
 
 
-# 1270. All People Report to the Given Manager
-SELECT      E1.employee_id
-FROM        Employees AS E1, Employees AS E2, Employees AS E3
-WHERE       (E1.manager_id = E2.employee_id) AND (E2.manager_id = E3.employee_id) 
-            AND (E1.employee_id != E1.manager_id) AND (E3.manager_id = 1);
+# 1285. Find the Start and End Number of Continuous Ranges
+SELECT      MIN(log_id) AS 'start_id',
+            MAX(log_id) AS 'end_id'
+FROM        (
+SELECT      log_id,
+            (log_id - rn) AS 'diff'
+FROM        (
+SELECT      log_id,
+            ROW_NUMBER() OVER() AS 'rn'
+FROM        Logs) T1) T2
+GROUP BY    diff;
+
+
+
+# 1294. Weather Type in Each Country
+SELECT      C.country_name,
+            CASE
+            WHEN  AVG(W.weather_state) <= 15 THEN 'Cold'
+            WHEN  AVG(W.weather_state) >= 25 THEN 'Hot'
+            ELSE  'Warm'
+            END   'weather_type'
+FROM        Countries AS C
+INNER JOIN  Weather AS W
+ON          C.country_id = W.country_id
+WHERE       DATE_FORMAT(W.day, "%Y-%m") = '2019-11'
+GROUP BY    C.country_name;   
 
 
 
