@@ -1312,6 +1312,13 @@ GROUP BY    C.country_name;
 
 
 
+# 1303. Find the Team Size
+SELECT      employee_id,
+            COUNT(*) OVER(PARTITION BY team_id) AS 'team_size'
+FROM        Employee;
+
+
+
 # 1393. Capital Gain/Loss
 SELECT      stock_name,
             SUM(calculated_price) AS 'capital_gain_loss'
@@ -1323,6 +1330,16 @@ SELECT      *,
             END AS 'calculated_price'
 FROM        Stocks) AS Cal_Table
 GROUP BY    stock_name;
+
+
+
+# 1308. Running Total for Different Genders
+SELECT    gender,
+          day,
+          SUM(score_points) OVER(PARTITION BY gender ORDER BY day) AS 'total'
+FROM      Scores
+GROUP BY  gender, day
+ORDER BY  gender, day;
 
 
 
