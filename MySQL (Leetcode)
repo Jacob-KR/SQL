@@ -1338,6 +1338,29 @@ ORDER BY    visited_on;
 
 
 
+# 1308. Running Total for Different Genders
+SELECT    gender,
+          day,
+          SUM(score_points) OVER(PARTITION BY gender ORDER BY day) AS 'total'
+FROM      Scores
+GROUP BY  gender, day
+ORDER BY  gender, day;
+
+
+
+# 1322. Ads Performance
+SELECT      ad_id,
+            IFNULL(ROUND((SUM(clicked) / (SUM(viewed) + SUM(clicked)))*100, 2), 0) AS 'ctr'
+FROM        (
+SELECT      ad_id,
+            IF(action = 'Clicked', 1, 0) AS 'clicked',
+            IF(action = 'Viewed', 1, 0) AS 'viewed'
+FROM        Ads) T1
+GROUP BY    ad_id
+ORDER BY    ctr DESC, ad_id ASC;
+
+
+
 # 1393. Capital Gain/Loss
 SELECT      stock_name,
             SUM(calculated_price) AS 'capital_gain_loss'
@@ -1349,16 +1372,6 @@ SELECT      *,
             END AS 'calculated_price'
 FROM        Stocks) AS Cal_Table
 GROUP BY    stock_name;
-
-
-
-# 1308. Running Total for Different Genders
-SELECT    gender,
-          day,
-          SUM(score_points) OVER(PARTITION BY gender ORDER BY day) AS 'total'
-FROM      Scores
-GROUP BY  gender, day
-ORDER BY  gender, day;
 
 
 
