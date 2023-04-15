@@ -1319,6 +1319,25 @@ FROM        Employee;
 
 
 
+# 1321. Restaurant Growth
+SELECT      visited_on,
+            amount,
+            7days_avg AS 'average_amount'
+FROM        (
+SELECT      visited_on,
+            SUM(amount) OVER(ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) AS 'amount',
+            ROUND(SUM(amount) OVER(ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) / 7, 2) AS '7days_avg',
+            MIN(DATE_ADD(visited_on, INTERVAL 6 DAY)) OVER() AS 'c6'
+FROM        (
+SELECT      visited_on,
+            SUM(amount) AS 'amount'
+FROM        Customer
+GROUP BY    visited_on) T1) T2
+WHERE       visited_on >= c6
+ORDER BY    visited_on;
+
+
+
 # 1393. Capital Gain/Loss
 SELECT      stock_name,
             SUM(calculated_price) AS 'capital_gain_loss'
