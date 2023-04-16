@@ -1361,6 +1361,18 @@ ORDER BY    ctr DESC, ad_id ASC;
 
 
 
+# 1327. List the Products Ordered in a Period
+SELECT      P.product_name,
+            SUM(unit) AS 'unit'
+FROM        Products AS P
+INNER JOIN  Orders AS O
+ON          P.product_id = O.product_id
+WHERE       DATE_FORMAT(O.order_date, '%Y-%m') = '2020-02'
+GROUP BY    P.product_name
+HAVING      SUM(unit) >= 100;
+
+
+
 # 1393. Capital Gain/Loss
 SELECT      stock_name,
             SUM(calculated_price) AS 'capital_gain_loss'
