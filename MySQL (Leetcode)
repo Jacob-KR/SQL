@@ -1373,6 +1373,26 @@ HAVING      SUM(unit) >= 100;
 
 
 
+# 1341. Movie Rating
+(SELECT      name AS 'results'
+FROM        Users AS U
+INNER JOIN  MovieRating AS MR
+ON          U.user_id = MR.user_id
+GROUP BY    name
+ORDER BY    COUNT(rating) DESC, name ASC
+LIMIT       1)
+UNION
+(SELECT          M.title AS 'results'
+FROM            Movies AS M
+INNER JOIN      MovieRating AS MR
+ON              M.movie_id = MR.movie_id
+WHERE           DATE_FORMAT(MR.created_at, '%Y-%m') = '2020-02'
+GROUP BY        M.title
+ORDER BY        AVG(MR.rating) DESC, M.title ASC
+LIMIT           1);
+
+
+
 # 1393. Capital Gain/Loss
 SELECT      stock_name,
             SUM(calculated_price) AS 'capital_gain_loss'
