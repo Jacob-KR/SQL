@@ -1393,6 +1393,31 @@ LIMIT           1);
 
 
 
+# 1350. Students With Invalid Departments
+SELECT      S.id,
+            S.name
+FROM        Students AS S
+LEFT JOIN   Departments AS D
+ON          S.department_id = D.id
+WHERE       D.id IS NULL;
+
+
+
+# 1355. Activity Participants
+WITH  T1 AS (
+SELECT      A.name,
+            COUNT(*) AS 'cnt'
+FROM        Activities AS A
+INNER JOIN  Friends AS F
+ON          A.name = F.activity
+GROUP BY    A.name)
+SELECT      name AS 'activity'
+FROM        T1
+WHERE       cnt != (SELECT MAX(cnt) FROM T1)
+            AND cnt != (SELECT MIN(cnt) FROM T1);
+
+
+
 # 1393. Capital Gain/Loss
 SELECT      stock_name,
             SUM(calculated_price) AS 'capital_gain_loss'
