@@ -1418,6 +1418,31 @@ WHERE       cnt != (SELECT MAX(cnt) FROM T1)
 
 
 
+# 1364. Number of Trusted Contacts of a Customer
+SELECT      invoice_id,
+            customer_name,
+            price,
+            COUNT(contact_name) AS 'contacts_cnt',
+            SUM(t_cnt) AS 'trusted_contacts_cnt'
+FROM        (
+SELECT      invoice_id,
+            price,
+            customer_name,
+            C2.user_id,
+            email,
+            contact_name,
+            contact_email,
+            IF(contact_email IN (SELECT email FROM Customers), 1, 0) AS 't_cnt'
+FROM        Invoices AS I
+INNER JOIN  Customers AS C
+ON          I.user_id = C.customer_id
+LEFT JOIN   Contacts AS C2
+ON          C.customer_id = C2.user_id) subtable
+GROUP BY    invoice_id, customer_name
+ORDER BY    invoice_id ASC;
+
+
+
 # 1393. Capital Gain/Loss
 SELECT      stock_name,
             SUM(calculated_price) AS 'capital_gain_loss'
