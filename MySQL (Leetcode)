@@ -1443,6 +1443,15 @@ ORDER BY    invoice_id ASC;
 
 
 
+# 1378. Replace Employee ID With The Unique Identifier 
+SELECT      unique_id,
+            name
+FROM        Employees AS E
+LEFT JOIN   EmployeeUNI AS U
+ON          E.id = U.id;
+
+
+
 # 1393. Capital Gain/Loss
 SELECT      stock_name,
             SUM(calculated_price) AS 'capital_gain_loss'
@@ -1454,6 +1463,24 @@ SELECT      *,
             END AS 'calculated_price'
 FROM        Stocks) AS Cal_Table
 GROUP BY    stock_name;
+
+
+
+# 1398. Customers Who Bought Products A and B but Not C
+WITH  T1 AS (
+SELECT      C.customer_id,
+            C.customer_name,
+            GROUP_CONCAT(O.product_name) AS 'products'
+FROM        Customers AS C
+INNER JOIN  Orders AS O
+ON          C.customer_id = O.customer_id
+GROUP BY    C.customer_id, C.customer_name)
+
+SELECT      customer_id,
+            customer_name
+FROM        T1
+WHERE       (products LIKE '%A%') AND (products LIKE '%B%') AND (products NOT LIKE '%C%')
+ORDER BY    customer_id;
 
 
 
