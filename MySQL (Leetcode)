@@ -1499,6 +1499,57 @@ ORDER BY    T1.travelled_distance DESC, T1.name ASC;
 
 
 
+# 1440. Evaluate Boolean Expression
+WITH T1 AS  (
+SELECT      *,
+            CASE
+            WHEN left_value = right_value THEN '='
+            WHEN left_value > right_value THEN '>'
+            ELSE '<'
+            END AS 'operator_answer'
+FROM        (
+SELECT      E.left_operand,
+            V1.value AS 'left_value',
+            E.operator,
+            E.right_operand,
+            V2.value AS 'right_value'
+FROM        Expressions AS E
+INNER JOIN  Variables AS V1
+ON          E.left_operand = V1.name
+INNER JOIN  Variables AS V2
+ON          E.right_operand = V2.name) subtable)
+
+SELECT      left_operand,
+            operator,
+            right_operand,
+            CASE
+            WHEN operator = operator_answer THEN 'true'
+            ELSE 'false'
+            END 'value'
+FROM        T1;
+
+
+
+# 1445. Apples & Oranges
+SELECT      T1.sale_date,
+            (T1.sold_num - T2.sold_num) AS 'diff'
+FROM        (
+SELECT      sale_date,
+            sold_num
+FROM        Sales
+WHERE       fruit = 'apples'
+ORDER BY    sale_date) T1
+INNER JOIN  (
+SELECT      sale_date,
+            sold_num
+FROM        Sales
+WHERE       fruit = 'oranges'
+ORDER BY    sale_date) T2
+ON          T1.sale_date = T2.sale_date
+ORDER BY    sale_date;
+
+
+
 # 1484. Group Sold Products By The Date
 SELECT      sell_date,
             COUNT(DISTINCT product) AS 'num_sold',
