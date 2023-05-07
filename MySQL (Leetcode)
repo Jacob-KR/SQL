@@ -1550,6 +1550,37 @@ ORDER BY    sale_date;
 
 
 
+# 1454. Active Users
+SELECT      DISTINCT id,
+            name
+FROM        (
+SELECT      A.id,
+            A.name,
+            L.login_date AS 'date',
+            ROW_NUMBER() OVER(PARTITION BY A.id) AS 'rn',
+            DATEDIFF('2020-07-30', L.login_date) AS 'date_diff',
+            (ROW_NUMBER() OVER(PARTITION BY A.id ORDER BY id, L.login_date) + DATEDIFF('2021-07-30', L.login_date)) AS 'diff_sum'
+FROM        Accounts AS A
+INNER JOIN  (SELECT  id, login_date FROM Logins GROUP BY id, login_date) L
+ON          A.id = L.id) T1
+GROUP BY    id, name, diff_sum
+HAVING      COUNT(*) >= 5
+ORDER BY    id;
+
+
+
+# 1459. Rectagles Area
+SELECT      DISTINCT P1.id AS 'p1',
+            P2.id AS 'p2',
+            (ABS(P1.x_value - P2.x_value) * ABS(P1.y_value - P2.y_value)) AS 'area'
+FROM        Points AS P1
+CROSS JOIN  Points AS P2
+WHERE       ((ABS(P1.x_value - P2.x_value) * ABS(P1.y_value - P2.y_value)) != 0)
+            AND P1.id <= P2.id
+ORDER BY    (ABS(P1.x_value - P2.x_value) * ABS(P1.y_value - P2.y_value)) DESC, p1 ASC, p2 ASC;
+
+
+
 # 1484. Group Sold Products By The Date
 SELECT      sell_date,
             COUNT(DISTINCT product) AS 'num_sold',
