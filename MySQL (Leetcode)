@@ -1662,6 +1662,31 @@ WHERE       T.content_id = C.content_id
 
 
 
+# 1511. Customer Order Frequency
+WITH  T1 AS (
+SELECT      C.customer_id,
+            C.name,
+            MONTH(O.order_date) AS 'month',
+            SUM(O.quantity * P.price) AS 'total'
+FROM        Customers AS C, Orders AS O, Product As P
+WHERE       C.customer_id = O.customer_id
+            AND O.product_id = P.product_id
+GROUP BY    C.customer_id, C.name, MONTH(O.order_date))
+SELECT      DISTINCT customer_id,
+            name
+FROM        T1
+WHERE       name IN (SELECT DISTINCT name FROM T1 WHERE month = 6 AND total >= 100)
+            AND name IN (SELECT DISTINCT name FROM T1 WHERE month = 7 AND total >= 100);
+
+
+
+# 1517. Find Users With Valid E-Mails
+SELECT      *
+FROM        Users
+WHERE       mail REGEXP '^[a-zA-Z][a-zA-Z0-9._-]*@leetcode\\.com';
+
+
+
 # 1527. Patients With a Condition
 SELECT  patient_id,
         patient_name,
