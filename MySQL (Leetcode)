@@ -1726,6 +1726,50 @@ ORDER BY  TRIM(LOWER(product_name)), DATE_FORMAT(sale_date, '%Y-%m');
 
 
 
+# 1549. The Most Recent Orders for Each Product
+SELECT      product_name,
+            product_id,
+            order_id,
+            order_date
+FROM        (
+SELECT      *,
+            DENSE_RANK() OVER(PARTITION BY product_id ORDER BY order_date DESC) AS 'rn'
+FROM        Orders AS O
+INNER JOIN  Products AS P
+USING(product_id)) subtable
+WHERE       rn = 1
+ORDER BY    product_name, product_id, order_id;
+
+
+
+# 1555. Bank Account Summary
+SELECT      DISTINCT subtable1.user_id,
+            subtable1.user_name,
+            (subtable1.credit - subtable1.pay + subtable2.paid) AS 'credit',
+            CASE
+            WHEN (subtable1.credit - subtable1.pay + subtable2.paid) < 0 THEN 'Yes'
+            ELSE 'No'
+            END AS 'credit_limit_breached'
+FROM        (
+SELECT      user_id,
+            user_name,
+            credit,
+            IFNULL(SUM(amount) OVER(PARTITION BY user_id), 0) AS 'pay'
+FROM        Users AS U
+LEFT JOIN   Transactions AS T1
+ON          U.user_id = T1.paid_by) subtable1
+INNER JOIN  (
+SELECT      user_id,
+            user_name,
+            credit,
+            IFNULL(SUM(amount) OVER(PARTITION BY user_id), 0) AS 'paid'
+FROM        Users AS U
+LEFT JOIN   Transactions AS T2
+ON          U.user_id = T2.paid_to) subtable2
+ON          subtable1.user_id = subtable2.user_id;
+
+
+
 # 1581. Customer Who Visited but Did Not Make any Transactions
 SELECT      customer_id,
             SUM(
