@@ -1697,6 +1697,35 @@ WHERE   conditions LIKE '% DIAB1%'
 
 
 
+# 1532. The Most Recent Three Orders
+SELECT      customer_name,
+            customer_id,
+            order_id,
+            order_date
+FROM        (
+SELECT      name AS 'customer_name',
+            customer_id,
+            order_id,
+            order_date,
+            ROW_NUMBER() OVER(PARTITION BY customer_id ORDER BY order_date DESC) AS 'rn'
+FROM        Customers AS C
+INNER JOIN  Orders AS O
+USING       (customer_id)) subtable
+WHERE       rn IN (1, 2, 3)
+ORDER BY    customer_name, customer_id, order_date DESC;
+
+
+
+# 1543. Fix Product Name Format
+SELECT    TRIM(LOWER(product_name)) AS 'product_name',
+          DATE_FORMAT(sale_date, '%Y-%m') AS 'sale_date',
+          COUNT(*) AS 'total'
+FROM      Sales
+GROUP BY  TRIM(LOWER(product_name)), DATE_FORMAT(sale_date, '%Y-%m')
+ORDER BY  TRIM(LOWER(product_name)), DATE_FORMAT(sale_date, '%Y-%m');
+
+
+
 # 1581. Customer Who Visited but Did Not Make any Transactions
 SELECT      customer_id,
             SUM(
